@@ -7,11 +7,10 @@ import fund.cyber.cassandra.ethereum.repository.*
 import fund.cyber.search.model.chains.ChainEntityType
 import fund.cyber.search.model.chains.ChainFamily
 import fund.cyber.search.model.chains.ChainInfo
+import io.micrometer.core.instrument.Timer
 import org.junit.jupiter.api.Test
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import io.micrometer.core.instrument.Timer
-import scala.reflect.internal.Trees
 
 class EthereumMessageListenerResolverTest {
 
