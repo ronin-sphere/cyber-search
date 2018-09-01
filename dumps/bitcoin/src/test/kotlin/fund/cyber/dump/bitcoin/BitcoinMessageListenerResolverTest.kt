@@ -20,6 +20,7 @@ import io.micrometer.core.instrument.Timer
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.junit.jupiter.api.Test
+import org.springframework.util.Assert
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.math.BigDecimal
@@ -40,8 +41,6 @@ class BitcoinMessageListenerResolverTest {
             on { save(any<CqlBitcoinContractMinedBlock>()) }.thenReturn(Mono.empty<CqlBitcoinContractMinedBlock>())
             on { delete(any()) }.thenReturn(Mono.empty<Void>())
         }
-
-        val blockDumpProcess = BlockDumpProcess(blockRepository, contractMinedBlockRepository, chainInfo)
 
         val txADb = tx("A", "A")
         val txAPool = tx("A", "A").mempoolState()
@@ -73,10 +72,7 @@ class BitcoinMessageListenerResolverTest {
 
         var chainEntityType = ChainEntityType.BLOCK
         val result = bitcoinMessageListenerResolver.getListenerByType(chainEntityType)
-
-        println("result = " + result)
-//        verify(result, )
-
+        Assert.notNull(result, "result listener resolver needs to be created")
     }
 
     fun tx(hash: String, blockHash: String?) = BitcoinTx(

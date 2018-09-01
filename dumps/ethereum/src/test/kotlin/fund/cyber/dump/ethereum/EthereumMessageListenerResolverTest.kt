@@ -2,6 +2,7 @@ package fund.cyber.dump.ethereum
 
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import fund.cyber.cassandra.ethereum.model.*
 import fund.cyber.cassandra.ethereum.repository.*
 import fund.cyber.search.model.chains.ChainEntityType
@@ -9,6 +10,7 @@ import fund.cyber.search.model.chains.ChainFamily
 import fund.cyber.search.model.chains.ChainInfo
 import io.micrometer.core.instrument.Timer
 import org.junit.jupiter.api.Test
+import org.springframework.util.Assert
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
@@ -46,9 +48,6 @@ class EthereumMessageListenerResolverTest {
             on { delete(any()) }.thenReturn(Mono.empty<Void>())
         }
 
-        // Do I need this?
-        val blockDumpProcess = BlockDumpProcess(blockRepository, contractMinedBlockRepository, chainInfo)
-
         val uncleRepository = mock<EthereumUncleRepository> {
             on { save(any<CqlEthereumUncle>()) }.thenReturn(Mono.empty())
             on { delete(any()) }.thenReturn(Mono.empty())
@@ -73,7 +72,7 @@ class EthereumMessageListenerResolverTest {
         )
 
         val result = ethereumMessageListenerResolver.getListenerByType(ChainEntityType.BLOCK)
-        println("result = "+ result)
+        Assert.notNull(result, "result listener resolver needs to be created")
     }
 
 
